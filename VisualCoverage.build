@@ -86,7 +86,7 @@
                 <include name="**/*" />
             </fileset>
         </copy>
-        <copy todir="${BUILD.dir}" file="README.md">
+        <copy todir="${BUILD.dir}" file="README.md" />
         <!-- Create package -->
         <property name="zip_prefix" value="${project::get-name()}-${VERSION.full}" />
         <zip zipfile="${project::get-base-directory()}/build/${project::get-name()}-${VERSION.full}-bin.zip">
