@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<project name="VisualCoverage" default="build">
+    <!--
+        Required properties:
+            * BUILD.dir             - (path) root level to build to, assemblies will go in ${build.dir}/bin
+            * BUILD.debug           - (true|false) debug build?
+    -->
+    <target name="build">
+        <!-- build VisualCoverage.Console -->
+        <csc target="exe" platform="x86" debug="${BUILD.debug}" output="${BUILD.dir}/bin/${project::get-name()}.exe" doc="${BUILD.dir}/bin/${project::get-name()}.xml">
+            <sources failonempty="true">
+                <include name="**/*.cs" />
+                <!-- common assembly-level attributes -->
+                <include name="../CommonAssemblyInfo.cs" />
+            </sources>
+            <references>
+                <include name="${LIB.dir}/log4net.dll"/>
+                <include name="${BUILD.dir}/bin/VisualCoverage.Core.dll"/>
+                <include name="System.Web.dll"/>
+            </references>
+        </csc>
+        <!-- Target Config (App.config) copied to BUILD.dir -->
+        <copy tofile="${BUILD.dir}/bin/${project::get-name()}.exe.config" file="App.config" />
+    </target>
+</project>

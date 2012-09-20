@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<project name="VisualCoverage.Core" default="build">
+    <!--
+        Required properties:
+            * BUILD.dir             - (path) root level to build to, assemblies will go in ${build.dir}/bin
+            * BUILD.debug           - (true|false) debug build?
+    -->
+    <target name="build">
+        <!-- build VisualCoverage.Core -->
+        <csc target="library" platform="x86" debug="${BUILD.debug}" output="${BUILD.dir}/bin/${project::get-name()}.dll" doc="${BUILD.dir}/bin/${project::get-name()}.xml">
+            <sources failonempty="true">
+                <include name="**/*.cs" />
+                <!-- common assembly-level attributes -->
+                <include name="../CommonAssemblyInfo.cs" />
+            </sources>
+            <resources prefix="VisualCoverage.Core" dynamicprefix="true">
+                <include name="Resources/**/*" />
+            </resources>
+            <references>
+                <include name="${LIB.dir}/log4net.dll"/>
+                <include name="${LIB.dir}/Microsoft.VisualStudio.Coverage.Analysis.dll"/>
+                <include name="System.Web.dll"/>
+            </references>
+        </csc>
+    </target>
+</project>

@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<project name="VisualCoverage" default="all">
+    <description>
+    VisualCoverage
+
+    MIT License Copyright (c) 2012 Joaquin Sargiotto (joaquinsargiotto@gmail.com).
+    </description>
+
+    <property name="BUILD.number" value="1" />
+    
+    <property name="VERSION.major" value="1" />
+    <property name="VERSION.minor" value="0" />
+    <property name="VERSION.patch" value="0" />
+    <property name="VERSION.build" value="${BUILD.number}" />
+    <property name="VERSION.full" value="${VERSION.major}.${VERSION.minor}.${VERSION.patch}.${VERSION.build}" />
+
+    <!-- Build configuration -->
+    <property name="BUILD.version" value="${VERSION.major}.${VERSION.minor}.${VERSION.patch}.${VERSION.build}" />
+    <property name="BUILD.dir" value="${project::get-base-directory()}/build/${project::get-name()}" />
+    <property name="BUILD.debug" value="true" />
+
+    <!-- Directory where all the 3rd party libs are -->
+    <property name="LIB.dir" value="${project::get-base-directory()}/lib" />
+    
+    <!-- Documentation folder -->
+    <property name="DOC.dir" value="${project::get-base-directory()}/doc" />
+
+
+    <!--
+        The "init" target defines the basic initial information for the build.
+    -->
+    <target name="init">
+        <!-- Generate the source file holding the common assembly-level attributes -->
+        <asminfo output="src/CommonAssemblyInfo.cs" language="CSharp">
+            <imports>
+                <import namespace="System" />
+                <import namespace="System.Reflection" />
+                <import namespace="System.Runtime.InteropServices" />
+            </imports>
+            <attributes>
+                <attribute type="AssemblyProductAttribute" value="${project::get-name()}" />
+                <attribute type="AssemblyDescriptionAttribute" value="A Tool to create a clover report from Visual Studio Coverage files." />
+                <attribute type="AssemblyCopyrightAttribute" value="Copyright (C) 2012-2023 Joaquin Sargiotto" />
+                <attribute type="AssemblyVersionAttribute" value="${BUILD.version}" />
+                <attribute type="AssemblyInformationalVersionAttribute" value="${BUILD.version}" />
+            </attributes>
+        </asminfo>
+    </target>
+
+
+    <!--
+        The "all" target is a shortcut for running the "clean" target followed
+        by the "build" target, to force a complete recompile.
+    -->
+    <target name="all" depends="clean, build, package" />
+
+
+    <!--
+        The "build" compiles the source code. In this case, we call all
+        the subprojects buildfiles to build. They (should) know what to do.
+    -->
+    <target name="build" depends="init">
+        <!-- Ensure bin directory exists -->
+        <echo message="Build Directory is ${BUILD.dir}" />
+        <!-- Ensure bin directory exists -->
+        <mkdir dir="${BUILD.dir}/bin" />
+        <!-- copy libraries to BUILD.dir -->
+        <copy todir="${BUILD.dir}/bin">
+            <fileset basedir="${LIB.dir}">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+        <!-- build components -->
+        <nant buildfile="src/VisualCoverage.Core/VisualCoverage.Core.build" target="build" />
+        <nant buildfile="src/VisualCoverage.Console/VisualCoverage.Console.build" target="build" />
+    </target>
+
+
+    <!--
+        The "package" target creates a zip file to distribute the application.
+    -->
+    <target name="package">
+        <!-- copy documentation to BUILD.dir -->
+        <copy todir="${BUILD.dir}">
+            <fileset basedir="${DOC.dir}">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+        <copy todir="${BUILD.dir}" file="README.md">
+        <!-- Create package -->
+        <property name="zip_prefix" value="${project::get-name()}-${VERSION.full}" />
+        <zip zipfile="${project::get-base-directory()}/build/${project::get-name()}-${VERSION.full}-bin.zip">
+            <fileset basedir="${BUILD.dir}" prefix="${zip_prefix}">
+                <include name="**/*" />
+            </fileset>
+        </zip>
+    </target>
+
+
+    <!--
+        The "clean" target deletes any previous "build" directory.
+    -->
+    <target name="clean">
+        <delete dir="${BUILD.dir}" if="${directory::exists(BUILD.dir)}" />
+    </target>
+</project>
