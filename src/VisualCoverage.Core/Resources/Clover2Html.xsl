@@ -12,8 +12,8 @@
         .rowHeader{ background:#ddedff;  border-bottom:#dcdcdc 1px solid;  border-top:#dcdcdc 1px solid;  border-right:#dcdcdc 1px solid;  font-size:14px;  padding:5px;  text-shadow:1px 0px 1px #888}
         .rowBody{ font-size:12px;  border-bottom:#9c9c9c 1px solid;  padding:10px}
         .projectRow{ font-size:14px !important;  font-weight:bold}
-        .barBehind{ background:#DE0000;  border:#9c9c9c 1px solid;  text-align:left;  height:10px;  width:100%;  border-radius:5px}
-        .barFront{ background:#00DE00;  height:10px;  border-radius:2px}
+        .barBehind{ background: #FFF; border: 2px solid #CCC; border-radius: 5px; height: 20px; text-align: left; width: 100%; }
+        .barFront{ background: #00DE00; border: 2px solid #00BD00; border-radius: 5px; height: 20px; left: -1px; position: relative; top: -2px; }
         .linebreak{ height:20px}
         td{ background:#fff}
     </style>
