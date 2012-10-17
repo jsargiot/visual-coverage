@@ -32,24 +32,49 @@ namespace VisualCoverage.Core.Util
     using System.IO;
     using System.Data;
     using System.Linq;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Text;
+    using System.Text.RegularExpressions;
     using Microsoft.VisualStudio.Coverage.Analysis;
     using VisualCoverage.Core.Elements;
     using VisualCoverage.Core.Metrics;
 
     public class MikeParser
     {
+        StringCollection __includeNamespaces = new StringCollection();
+        StringCollection __excludeNamespaces = new StringCollection();
+        StringCollection __includeFiles = new StringCollection();
+        StringCollection __excludeFiles = new StringCollection();
+        
         public MikeParser () {
+        }
+        
+        public void IncludeNamespace ( String ns ) {
+            this.__includeNamespaces.Add(ns);
+        }
+        
+        public void IncludeFile ( String filename ) {
+            this.__includeFiles.Add(filename);
+        }
+        
+        public void ExcludeNamespace ( String ns ) {
+            this.__excludeNamespaces.Add(ns);
+        }
+        
+        public void ExcludeFile ( String filename ) {
+            this.__excludeFiles.Add(filename);
         }
         
         public ProjectElement Parse ( String inputfile ) {
             ProjectElement PROJECT = new ProjectElement("new_project", 123323230);
             // Open file
-            using (CoverageInfo info = CoverageInfo.CreateFromFile(inputfile))
-            {
-                CoverageDS dataSet = info.BuildDataSet();
-                //CoverageDS dataSet = new CoverageDS();
-                //dataSet.ReadXml(@"C:\jsargiot\PERSONAL\CODE\VisualCoverage\example\intermediate.xml");
+            //using (CoverageInfo info = CoverageInfo.CreateFromFile(inputfile))
+            //{
+                //CoverageDS dataSet = info.BuildDataSet();
+                CoverageDS dataSet = new CoverageDS();
+                dataSet.ReadXml(@"C:\jsargiot\PERSONAL\CODE\CLOVER-CONVERT\example\intermediate.xml");
                 
                 Dictionary<String, PackageElement> packages = new Dictionary<String, PackageElement>();
                 Dictionary<uint, FileElement> files = new Dictionary<uint, FileElement>();
@@ -92,8 +117,14 @@ namespace VisualCoverage.Core.Util
                                 linenum = iline.Field<uint>("LnStart");
                                 le = new LineElement(linenum, "stmt", "");
                             }
-                            fe = files[fileid];
-                            fe.AddLine(le);
+                            
+                            // If the file doesn't exists in our report, we'll
+                            // just ignore this information
+                            if (files.ContainsKey(fileid))
+                            {
+                                fe = files[fileid];
+                                fe.AddLine(le);
+                            }
                         }
                         
                         // Count how many methods covered we have
@@ -108,11 +139,14 @@ namespace VisualCoverage.Core.Util
                     if (fe != null)
                     {
                         fe.AddClass(ce);
-                        PackageElement pe = packages[(string)iclass["NamespaceKeyName"]];
-                        pe.AddFile(fe);
+                        if (packages.ContainsKey((string)iclass["NamespaceKeyName"]))
+                        {
+                            PackageElement pe = packages[(string)iclass["NamespaceKeyName"]];
+                            pe.AddFile(fe);
+                        }
                     }
                 }
-            }
+            //}
             return PROJECT;
         }
         
@@ -120,9 +154,37 @@ namespace VisualCoverage.Core.Util
         {
             foreach(DataRow row in origin.Rows)
             {
-                PackageElement pe = new PackageElement ((string)row["NamespaceName"]);
-                dest.Add((string)row["NamespaceKeyName"], pe);
-                project.AddPackage(pe);
+                bool include = false;
+                // If there is no include... include all (.*)
+                if (__includeNamespaces.Count < 1)
+                    __includeNamespaces.Add(".*");
+                // Check if the namespace is included
+                String nsname = (string)row["NamespaceName"];
+                foreach (string entry in __includeNamespaces)
+                {
+                    if (TestRegex(nsname, entry)) 
+                    {
+                        include = true;
+                        break;
+                    }
+                }
+                // Check if the namespace is excluded
+                foreach (string entry in __excludeNamespaces)
+                {
+                    if (TestRegex(nsname, entry)) 
+                    {
+                        include = false;
+                        break;
+                    }
+                }
+                // If the namespace passed all the filters, then we must
+                // add it to the project
+                if (include)
+                {
+                    PackageElement pe = new PackageElement (nsname);
+                    dest.Add((string)row["NamespaceKeyName"], pe);
+                    project.AddPackage(pe);
+                }
             }
         }
         
@@ -130,10 +192,46 @@ namespace VisualCoverage.Core.Util
         {
             foreach(DataRow row in origin.Rows)
             {
-                FileInfo info = new FileInfo((string)row["SourceFileName"]);
-                FileElement fe = new FileElement (info.Name, info.FullName);
-                dest.Add((uint)row["SourceFileID"], fe);
+                bool include = false;
+                // If there is no include... include all (.*)
+                if (__includeFiles.Count < 1)
+                    __includeFiles.Add(".*");
+                // Check if the filename is included
+                String fname = (string)row["SourceFileName"];
+                foreach (string entry in __includeFiles)
+                {
+                    if (TestRegex(fname, entry)) 
+                    {
+                        include = true;
+                        break;
+                    }
+                }
+                // Check if the namespace is excluded
+                foreach (string entry in __excludeFiles)
+                {
+                    if (TestRegex(fname, entry)) 
+                    {
+                        include = false;
+                        break;
+                    }
+                }
+                // If the file passed all the filters, then we must
+                // add it to the dictionary
+                if (include)
+                {
+                    FileInfo info = new FileInfo(fname);
+                    FileElement fe = new FileElement (info.Name, info.FullName);
+                    dest.Add((uint)row["SourceFileID"], fe);
+                }
             }
+        }
+        
+        private bool TestRegex ( string s, string pattern ) {
+            
+            RegexOptions regexOptions = RegexOptions.Compiled;
+            Regex r = new Regex(pattern, regexOptions);
+            
+            return r.IsMatch(s);
         }
         
     }

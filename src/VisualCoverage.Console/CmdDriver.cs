@@ -29,6 +29,7 @@
 namespace VisualCoverage.Console
 {
     using System;
+    using System.Collections;
     using System.Globalization;
     using VisualCoverage.Core;
     using VisualCoverage.Core.Util;
@@ -41,6 +42,11 @@ namespace VisualCoverage.Console
     {
         private sealed class Options : CommandLineOptionsBase
         {
+            private ArrayList __filesExcludes = new ArrayList();
+            private ArrayList __filesIncludes = new ArrayList();
+            private ArrayList __namesIncludes = new ArrayList();
+            private ArrayList __namesExcludes = new ArrayList();
+            
             [Option(null, "html", Required = false, HelpText = "Html report output file (*.html).")]
             public string HtmlOutput {get; set;}
 
@@ -49,6 +55,50 @@ namespace VisualCoverage.Console
 
             [Option("i", "input", Required = true, HelpText = "Visual studio coverage (*.coverage) input file.")]
             public string InputFile { get; set; }
+            
+            [OptionArray(null, "include-namespace", HelpText = "N/A")]
+            public string[] IncludedNamespaces
+            { 
+                get {
+                    return (string[])__namesIncludes.ToArray(typeof(string));
+                }
+                set {
+                    __namesIncludes.AddRange(value);
+                }
+            }
+            
+            [OptionArray(null, "exclude-namespace", HelpText = "N/A")]
+            public string[] ExcludedNamespaces
+            { 
+                get {
+                    return (string[])__namesExcludes.ToArray(typeof(string));
+                }
+                set {
+                    __namesExcludes.AddRange(value);
+                }
+            }
+            
+            [OptionArray(null, "include-file", HelpText = "N/A")]
+            public string[] IncludedFiles
+            { 
+                get {
+                    return (string[])__filesIncludes.ToArray(typeof(string));
+                }
+                set {
+                    __filesIncludes.AddRange(value);
+                }
+            }
+            
+            [OptionArray(null, "exclude-file", HelpText = "N/A")]
+            public string[] ExcludedFiles
+            { 
+                get {
+                    return (string[])__filesExcludes.ToArray(typeof(string));
+                }
+                set {
+                    __filesExcludes.AddRange(value);
+                }
+            }
 
             [HelpOption]
             public string GetUsage()
@@ -65,10 +115,32 @@ namespace VisualCoverage.Console
             if (!parser.ParseArguments(args, options))
                 Environment.Exit(1);
             
-            // Parse coverage file
+            // Coverage file parser
             MikeParser mikeParser = new MikeParser();
+            
+            foreach(String s in options.IncludedNamespaces)
+            {
+                mikeParser.IncludeNamespace(s);
+            }
+            
+            foreach(String s in options.ExcludedNamespaces)
+            {
+                mikeParser.ExcludeNamespace(s);
+            }
+            
+            foreach(String s in options.IncludedFiles)
+            {
+                mikeParser.IncludeFile(s);
+            }
+            
+            foreach(String s in options.ExcludedFiles)
+            {
+                mikeParser.ExcludeFile(s);
+            }
+            
+            // Parse coverage file
             ProjectElement pe = mikeParser.Parse(options.InputFile);
-
+            
             // Generate clover report
             if (options.CloverOutput != null)
             {
