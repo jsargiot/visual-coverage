@@ -21,16 +21,44 @@ To run VisualCoverage, you will need the following components:
 Usage
 -----
 
-VisualCoverage.exe -i file.coverage [--html report.html] [--clover report.xml]
+VisualCoverage.exe -i file.coverage [--html report.html] [--clover report.xml] 
+    [--include-namespace pattern] [--exclude-namespace pattern]
+    [--include-file pattern] [--exclude-file pattern]
 
 Options:
-  --html {file.html}         Html report output file (*.html).
 
-  --clover {file.xml}       Clover report output file (*.xml).
+  --help                Display this help screen.
 
-  -i, --input    Required. Visual studio coverage (*.coverage) input file.
+  --html                Html report output file (*.html).
 
-  --help         Display this help screen.
+  --clover              Clover report output file (*.xml).
+
+  -i, --input           Required. Visual studio coverage (*.coverage) input
+                        file.
+
+  --include-namespace   Includes a namespace in the report. If no namespace is
+                        added, all namespaces are included. This value can be
+                        a regular expression. Can be specified multiple times.
+
+  --exclude-namespace   Exclude a namespace from the report. This value can be
+                        a regular expression, in that case, all matching
+                        namespaces will be excluded. Can be specified multiple
+                        times.
+
+  --include-file        Includes a file in the report. This value can be a
+                        regular expression. If no files are added, all files
+                        are included in the report. This argument can be
+                        specified multiple times to specify multiple files.
+
+  --exclude-file        Excludes a file from the report. This value can be a
+                        regular expression, in that case, all files matching
+                        this value will be excluded from the report. This
+                        argument can be specified multiple times.
+
+  --help                Display this help screen.
+
+
+
 
 HINT: In order to be able to read the coverage file, the images (a.k.a libraries, executables) that were executed during testing must be accesible and in the directory where they were executed.
 
@@ -47,6 +75,11 @@ Examples
     # Generates both reports from a single input file
     VisualCoverage.exe --input otherfile.coverage --html report.html --clover clover.xml
 
+    # Generates html report excluding all tests files
+    VisualCoverage.exe --input file.coverage --html report.html --exclude-file .*test.*
+    
+    # Generates html report excluding namespace1 and namespace2
+    VisualCoverage.exe --input file.coverage --html report.html --exclude-namespace namespace1 -- exclude-namespace namespace2
 
 License
 -------

@@ -56,7 +56,7 @@ namespace VisualCoverage.Console
             [Option("i", "input", Required = true, HelpText = "Visual studio coverage (*.coverage) input file.")]
             public string InputFile { get; set; }
             
-            [OptionArray(null, "include-namespace", HelpText = "N/A")]
+            [OptionArray(null, "include-namespace", HelpText = "Includes a namespace in the report. If no namespace is added, all namespaces are included. This value can be a regular expression. Can be specified multiple times.")]
             public string[] IncludedNamespaces
             { 
                 get {
@@ -67,7 +67,7 @@ namespace VisualCoverage.Console
                 }
             }
             
-            [OptionArray(null, "exclude-namespace", HelpText = "N/A")]
+            [OptionArray(null, "exclude-namespace", HelpText = "Exclude a namespace from the report. This value can be a regular expression, in that case, all matching namespaces will be excluded. Can be specified multiple times.")]
             public string[] ExcludedNamespaces
             { 
                 get {
@@ -78,7 +78,7 @@ namespace VisualCoverage.Console
                 }
             }
             
-            [OptionArray(null, "include-file", HelpText = "N/A")]
+            [OptionArray(null, "include-file", HelpText = "Includes a file in the report. This value can be a regular expression. If no files are added, all files are included in the report. This argument can be specified multiple times to specify multiple files.")]
             public string[] IncludedFiles
             { 
                 get {
@@ -89,7 +89,7 @@ namespace VisualCoverage.Console
                 }
             }
             
-            [OptionArray(null, "exclude-file", HelpText = "N/A")]
+            [OptionArray(null, "exclude-file", HelpText = "Excludes a file from the report. This value can be a regular expression, in that case, all files matching this value will be excluded from the report. This argument can be specified multiple times.")]
             public string[] ExcludedFiles
             { 
                 get {
