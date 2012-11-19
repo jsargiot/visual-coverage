@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.Coverage.Analysis">
+      <HintPath>..\..\lib\Microsoft.VisualStudio.Coverage.Analysis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,8 +44,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="util\VisualCoverageOptions.cs" />
+    <Compile Include="CloverReport.cs" />
+    <Compile Include="HtmlReport.cs" />
+    <Compile Include="MikeParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Elements\ClassElement.cs" />
+    <Compile Include="Elements\CoverageElement.cs" />
+    <Compile Include="Elements\FileElement.cs" />
+    <Compile Include="Elements\LineElement.cs" />
+    <Compile Include="Elements\PackageElement.cs" />
+    <Compile Include="Elements\ProjectElement.cs" />
+    <Compile Include="Metrics\BaseMetrics.cs" />
+    <Compile Include="Metrics\ClassMetrics.cs" />
+    <Compile Include="Metrics\FileMetrics.cs" />
+    <Compile Include="Metrics\PackageMetrics.cs" />
+    <Compile Include="Metrics\ProjectMetrics.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Clover2Html.xsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

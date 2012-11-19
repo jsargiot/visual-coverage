@@ -8,8 +8,8 @@
     <ProjectGuid>{E3BB86AA-FD69-4243-94FB-E448BAF608FD}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VisualCoverage.Console</RootNamespace>
-    <AssemblyName>VisualCoverage.Console</AssemblyName>
+    <RootNamespace>VisualCoverage</RootNamespace>
+    <AssemblyName>VisualCoverage</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\lib\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,13 +44,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CmdDriver.cs" />
+    <Compile Include="CommandLine\CommandLine.cs" />
+    <Compile Include="CommandLine\CommandLineText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisualCoverage.Core\VisualCoverage.Core.csproj">
       <Project>{91ACD43C-267E-46E9-9E87-52C9F0151AA4}</Project>
       <Name>VisualCoverage.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
