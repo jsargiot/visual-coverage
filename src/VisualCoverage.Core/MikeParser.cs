@@ -70,11 +70,9 @@ namespace VisualCoverage.Core.Util
         public ProjectElement Parse ( String inputfile ) {
             ProjectElement PROJECT = new ProjectElement("new_project", 123323230);
             // Open file
-            //using (CoverageInfo info = CoverageInfo.CreateFromFile(inputfile))
-            //{
-                //CoverageDS dataSet = info.BuildDataSet();
-                CoverageDS dataSet = new CoverageDS();
-                dataSet.ReadXml(@"C:\jsargiot\PERSONAL\CODE\CLOVER-CONVERT\example\intermediate.xml");
+            using (CoverageInfo info = CoverageInfo.CreateFromFile(inputfile))
+            {
+                CoverageDS dataSet = info.BuildDataSet();
                 
                 Dictionary<String, PackageElement> packages = new Dictionary<String, PackageElement>();
                 Dictionary<uint, FileElement> files = new Dictionary<uint, FileElement>();
@@ -146,7 +144,7 @@ namespace VisualCoverage.Core.Util
                         }
                     }
                 }
-            //}
+            }
             return PROJECT;
         }
         
