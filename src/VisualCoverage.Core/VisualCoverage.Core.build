@@ -17,7 +17,6 @@
                 <include name="Resources/**/*" />
             </resources>
             <references>
-                <include name="${LIB.dir}/log4net.dll"/>
                 <include name="${LIB.dir}/Microsoft.VisualStudio.Coverage.Analysis.dll"/>
                 <include name="System.Web.dll"/>
             </references>

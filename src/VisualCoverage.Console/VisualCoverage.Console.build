@@ -14,7 +14,6 @@
                 <include name="../CommonAssemblyInfo.cs" />
             </sources>
             <references>
-                <include name="${LIB.dir}/log4net.dll"/>
                 <include name="${BUILD.dir}/bin/VisualCoverage.Core.dll"/>
                 <include name="System.Web.dll"/>
             </references>
