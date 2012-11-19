@@ -59,7 +59,7 @@
     <Compile Include="Metrics\FileMetrics.cs" />
     <Compile Include="Metrics\PackageMetrics.cs" />
     <Compile Include="Metrics\ProjectMetrics.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
+    <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -67,9 +67,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Clover2Html.xsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Resources\Clover2Html.xsl" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
