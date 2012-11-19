@@ -6,7 +6,7 @@
     MIT License Copyright (c) 2012 Joaquin Sargiotto (joaquinsargiotto@gmail.com).
     </description>
 
-    <property name="BUILD.number" value="1" />
+    <property name="BUILD.number" value="2" />
     
     <property name="VERSION.major" value="1" />
     <property name="VERSION.minor" value="0" />
