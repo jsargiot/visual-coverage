@@ -4,8 +4,10 @@
 // Author:
 //   Joaquin Sargiotto (joaquinsargiotto@gmail.com)
 // Contributor(s):
+//   Martin M Reed
 //
 //
+// Copyright (c) 2013 Martin M Reed
 // Copyright (c) 2012 Joaquin Sargiotto
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
