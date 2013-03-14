@@ -1,4 +1,4 @@
-﻿//
+//
 // visual-coverage: CmdDriver.cs
 //
 // Author:
@@ -42,6 +42,7 @@ namespace VisualCoverage.Console
     {
         private sealed class Options : CommandLineOptionsBase
         {
+            private ArrayList __inputFiles = new ArrayList();
             private ArrayList __filesExcludes = new ArrayList();
             private ArrayList __filesIncludes = new ArrayList();
             private ArrayList __namesIncludes = new ArrayList();
@@ -53,8 +54,18 @@ namespace VisualCoverage.Console
             [Option(null, "clover", Required = false, HelpText = "Clover report output file (*.xml).")]
             public string CloverOutput { get; set; }
 
-            [Option("i", "input", Required = true, HelpText = "Visual studio coverage (*.coverage) input file.")]
-            public string InputFile { get; set; }
+            [OptionArray("i", "input", Required = true, HelpText = "Visual studio coverage (*.coverage) input file. Can be specified multiple times.")]
+            public string[] InputFiles
+            {
+                get
+                {
+                    return (string[])__inputFiles.ToArray(typeof(string));
+                }
+                set
+                {
+                    __inputFiles.AddRange(value);
+                }
+            }
             
             [OptionArray(null, "include-namespace", HelpText = "Includes a namespace in the report. If no namespace is added, all namespaces are included. This value can be a regular expression. Can be specified multiple times.")]
             public string[] IncludedNamespaces
@@ -139,7 +150,7 @@ namespace VisualCoverage.Console
             }
             
             // Parse coverage file
-            ProjectElement pe = mikeParser.Parse(options.InputFile);
+            ProjectElement pe = mikeParser.Parse(options.InputFiles);
             
             // Generate clover report
             if (options.CloverOutput != null)
