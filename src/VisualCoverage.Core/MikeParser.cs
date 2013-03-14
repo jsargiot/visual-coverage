@@ -1,4 +1,4 @@
-﻿//
+//
 // visual-coverage: MikeParser.cs
 //
 // Author:
@@ -66,11 +66,54 @@ namespace VisualCoverage.Core.Util
         public void ExcludeFile ( String filename ) {
             this.__excludeFiles.Add(filename);
         }
-        
-        public ProjectElement Parse ( String inputfile ) {
+
+        private static CoverageInfo JoinCoverageFiles(String[] files)
+        {
+            CoverageInfo result = null;
+
+            try
+            {
+                foreach (String file in files)
+                {
+                    CoverageInfo current = CoverageInfo.CreateFromFile(file);
+
+                    if (result == null)
+                    {
+                        result = current;
+                        continue;
+                    }
+
+                    CoverageInfo joined = null;
+                    
+                    try
+                    {
+                        joined = CoverageInfo.Join(result, current);
+                    }
+                    finally
+                    {
+                        current.Dispose();
+                        result.Dispose();
+                    }
+
+                    result = joined;
+                }
+            }
+            catch (Exception)
+            {
+                if (result != null)
+                {
+                    result.Dispose();
+                }
+                throw;
+            }
+
+            return result;
+        }
+
+        public ProjectElement Parse(String[] inputfiles) {
             ProjectElement PROJECT = new ProjectElement("new_project", 123323230);
             // Open file
-            using (CoverageInfo info = CoverageInfo.CreateFromFile(inputfile))
+            using (CoverageInfo info = JoinCoverageFiles(inputfiles))
             {
                 CoverageDS dataSet = info.BuildDataSet();
                 
