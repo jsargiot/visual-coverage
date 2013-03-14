@@ -34,7 +34,7 @@ Options:
   --clover              Clover report output file (*.xml).
 
   -i, --input           Required. Visual studio coverage (*.coverage) input
-                        file.
+                        file. Can be specified multiple times.
 
   --include-namespace   Includes a namespace in the report. If no namespace is
                         added, all namespaces are included. This value can be
