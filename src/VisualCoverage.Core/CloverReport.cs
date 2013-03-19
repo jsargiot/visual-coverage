@@ -64,7 +64,8 @@ namespace VisualCoverage.Core
                     
                     foreach (LineElement le in fe.GetLines())
                     {
-                        buffer.Append(String.Format("\n      <line num=\"{0}\" count=\"{1}\" type=\"{2}\"", le.Number, le.Coverage, le.Type));
+                        int visits = le.Coverage < 2 ? 1 : 0;
+                        buffer.Append(String.Format("\n      <line num=\"{0}\" count=\"{1}\" type=\"{2}\"", le.Number, visits, le.Type));
                         if (le.Signature != null && le.Signature.Length > 0) {
                             buffer.Append(String.Format(" signature=\"{0}\"", le.Signature));
                         }
