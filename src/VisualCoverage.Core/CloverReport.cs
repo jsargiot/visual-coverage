@@ -66,7 +66,7 @@ namespace VisualCoverage.Core
                     {
                         buffer.Append(String.Format("\n      <line num=\"{0}\" count=\"{1}\" type=\"{2}\"", le.Number, le.Coverage, le.Type));
                         if (le.Signature != null && le.Signature.Length > 0) {
-                            buffer.Append(String.Format(" signature=\"{1}\"", le.Signature));
+                            buffer.Append(String.Format(" signature=\"{0}\"", le.Signature));
                         }
                         buffer.Append(" />");
                     }

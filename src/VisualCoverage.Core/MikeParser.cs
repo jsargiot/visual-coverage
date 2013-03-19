@@ -149,14 +149,15 @@ namespace VisualCoverage.Core.Util
                         foreach(DataRow iline in childRows2)
                         {
                             LineElement le = null;
-                            linenum = iline.Field<uint>("LnStart");
                             uint coverage = iline.Field<uint>("Coverage");
                             if (linenum == 0)
                             {
                                 fileid = iline.Field<uint>("SourceFileID");
                                 string methodname = System.Security.SecurityElement.Escape((string)imethod["MethodName"]);
+                                linenum = iline.Field<uint>("LnStart");
                                 le = new LineElement(linenum, "method", methodname, coverage);
                             } else {
+                                linenum = iline.Field<uint>("LnStart");
                                 le = new LineElement(linenum, "stmt", "", coverage);
                             }
                             
