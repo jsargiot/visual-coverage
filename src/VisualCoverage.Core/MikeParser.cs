@@ -174,10 +174,16 @@ namespace VisualCoverage.Core.Util
                         if ((uint)imethod["LinesCovered"] > 0) covered_methods++;
                     }
                     
-                    ClassElement ce = new ClassElement (System.Security.SecurityElement.Escape((string)iclass["ClassName"]));
                     uint totallines = (uint)iclass["LinesCovered"] + (uint)iclass["LinesNotCovered"] + (uint)iclass["LinesPartiallyCovered"];
-                    ClassMetrics cm = new ClassMetrics(1, totallines, (uint)iclass["LinesCovered"], 0, 0, (uint)childRows.Length, covered_methods);
-                    ce.Metrics = cm;
+                    uint complexity = 1;
+                    uint methods = (uint)childRows.Length;
+                    uint statements = totallines - methods;
+                    uint covered_statements = (uint)iclass["LinesCovered"] - covered_methods;
+                    uint conditionals = 0;
+                    uint covered_conditionals = 0;
+                    
+                    ClassElement ce = new ClassElement (System.Security.SecurityElement.Escape((string)iclass["ClassName"]));
+                    ce.Metrics = new ClassMetrics(complexity, statements, covered_statements, conditionals, covered_conditionals, methods, covered_methods);
                     
                     if (fe != null)
                     {
