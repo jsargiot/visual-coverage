@@ -36,11 +36,13 @@ namespace VisualCoverage.Core.Elements
         private uint _num = 0;
         private string _type = "";
         private string _signature = "";
+        private uint _coverage = 0;
     
-        public LineElement ( uint num, string type, string signature ) {
+        public LineElement ( uint num, string type, string signature, uint coverage ) {
             _num = num;
             _type = type;
             _signature = signature;
+            _coverage = coverage;
         }
         
         public uint Number
@@ -59,6 +61,12 @@ namespace VisualCoverage.Core.Elements
         {
             get { return _signature; }
             set { _signature = value; }
+        }
+        
+        public uint Coverage
+        {
+            get { return _coverage; }
+            set { _coverage = value; }
         }
     }
 }

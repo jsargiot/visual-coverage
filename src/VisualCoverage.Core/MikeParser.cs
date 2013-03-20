@@ -149,14 +149,16 @@ namespace VisualCoverage.Core.Util
                         foreach(DataRow iline in childRows2)
                         {
                             LineElement le = null;
+                            uint coverage = iline.Field<uint>("Coverage");
                             if (linenum == 0)
                             {
                                 fileid = iline.Field<uint>("SourceFileID");
+                                string methodname = System.Security.SecurityElement.Escape((string)imethod["MethodName"]);
                                 linenum = iline.Field<uint>("LnStart");
-                                le = new LineElement(linenum, "method", System.Security.SecurityElement.Escape((string)imethod["MethodName"]));
+                                le = new LineElement(linenum, "method", methodname, coverage);
                             } else {
                                 linenum = iline.Field<uint>("LnStart");
-                                le = new LineElement(linenum, "stmt", "");
+                                le = new LineElement(linenum, "stmt", "", coverage);
                             }
                             
                             // If the file doesn't exists in our report, we'll
@@ -172,10 +174,16 @@ namespace VisualCoverage.Core.Util
                         if ((uint)imethod["LinesCovered"] > 0) covered_methods++;
                     }
                     
-                    ClassElement ce = new ClassElement (System.Security.SecurityElement.Escape((string)iclass["ClassName"]));
                     uint totallines = (uint)iclass["LinesCovered"] + (uint)iclass["LinesNotCovered"] + (uint)iclass["LinesPartiallyCovered"];
-                    ClassMetrics cm = new ClassMetrics(1, totallines, (uint)iclass["LinesCovered"], 0, 0, (uint)childRows.Length, covered_methods);
-                    ce.Metrics = cm;
+                    uint complexity = 1;
+                    uint methods = (uint)childRows.Length;
+                    uint statements = totallines - methods;
+                    uint covered_statements = (uint)iclass["LinesCovered"] - covered_methods;
+                    uint conditionals = 0;
+                    uint covered_conditionals = 0;
+                    
+                    ClassElement ce = new ClassElement (System.Security.SecurityElement.Escape((string)iclass["ClassName"]));
+                    ce.Metrics = new ClassMetrics(complexity, statements, covered_statements, conditionals, covered_conditionals, methods, covered_methods);
                     
                     if (fe != null)
                     {
