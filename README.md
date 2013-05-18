@@ -15,7 +15,8 @@ Prerequisites
 To run VisualCoverage, you will need the following components:
 
 * Windows XP or Windows 7.
-* Microsoft .NET Framework version 4.0.
+* Microsoft .NET Framework version 4.5.
+* Visual Studio 2012 or Nant 0.90.
 
 
 Usage
