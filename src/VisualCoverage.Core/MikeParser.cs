@@ -135,7 +135,7 @@ namespace VisualCoverage.Core.Util
                     // Since it's one class per file (at least) declare
                     // file here and add it to the class.
                     uint fileid = 0;
-                    uint classlocs = 0;
+                    // uint classlocs = 0;
                     uint covered_methods = 0;
                     FileElement fe = null;
                     
@@ -187,11 +187,18 @@ namespace VisualCoverage.Core.Util
                     
                     if (fe != null)
                     {
-                        fe.AddClass(ce);
+                        if (!fe.GetClasses().Contains(ce))
+                        {
+                            fe.AddClass(ce);
+                        }
+
                         if (packages.ContainsKey((string)iclass["NamespaceKeyName"]))
                         {
                             PackageElement pe = packages[(string)iclass["NamespaceKeyName"]];
-                            pe.AddFile(fe);
+                            if (!pe.GetFiles().Contains(fe))
+                            {
+                                pe.AddFile(fe);
+                            }
                         }
                     }
                 }
