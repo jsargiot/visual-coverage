@@ -38,7 +38,7 @@ namespace VisualCoverage.Core
             
         }
         
-        public String Execute ( ProjectElement project ) {
+        public virtual String Execute ( ProjectElement project ) {
             
             StringBuilder buffer = new StringBuilder();
             
