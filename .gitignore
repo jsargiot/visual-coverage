@@ -3,6 +3,7 @@
 ################################################################################
 
 .suo
+/build
 /src/VisualCoverage.Console/obj
 /src/VisualCoverage.Console/bin
 /src/VisualCoverage.Core/obj
