@@ -38,12 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CmdDriver.cs" />
@@ -53,13 +48,13 @@
     <Compile Include="..\CommonAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VisualCoverage.Core\VisualCoverage.Core.csproj">
-      <Project>{91ACD43C-267E-46E9-9E87-52C9F0151AA4}</Project>
-      <Name>VisualCoverage.Core</Name>
-    </ProjectReference>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <ProjectReference Include="..\VisualCoverage.Core\VisualCoverage.Core.csproj">
+      <Project>{91acd43c-267e-46e9-9e87-52c9f0151aa4}</Project>
+      <Name>VisualCoverage.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

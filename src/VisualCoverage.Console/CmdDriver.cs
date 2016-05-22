@@ -32,7 +32,6 @@ namespace VisualCoverage.Console
 {
     using System;
     using System.Collections;
-    using System.Globalization;
     using VisualCoverage.Core;
     using VisualCoverage.Core.Util;
     using VisualCoverage.Core.Elements;
