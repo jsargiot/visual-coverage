@@ -17,8 +17,7 @@
                 <include name="Resources/**/*" />
             </resources>
             <references>
-                <include name="${LIB.dir}/Microsoft.VisualStudio.Coverage.Analysis.dll"/>
-                <include name="System.Web.dll"/>
+                <include name="${environment::get-variable('VS140COMNTOOLS')}..\IDE\PrivateAssemblies\Microsoft.VisualStudio.Coverage.Analysis.dll"/>
             </references>
         </csc>
     </target>

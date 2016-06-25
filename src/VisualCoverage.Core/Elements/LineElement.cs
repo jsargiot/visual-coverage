@@ -29,7 +29,6 @@
 namespace VisualCoverage.Core.Elements
 {
     using System;
-    using VisualCoverage.Core.Metrics;
 
     public class LineElement
     {

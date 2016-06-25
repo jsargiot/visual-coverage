@@ -29,8 +29,6 @@
 namespace VisualCoverage.Core.Metrics
 {
     using System;
-    using System.Text;
-    using System.Collections.Specialized;
 
     public class ClassMetrics : BaseMetrics
     {
@@ -57,7 +55,7 @@ namespace VisualCoverage.Core.Metrics
             get { return _metrics["coveredconditionals"] + _metrics["coveredstatements"] + _metrics["coveredmethods"]; }
         }
         
-        public String ToXml ()
+        public override String ToXml ()
         {
             SetMetric("elements", Elements);
             SetMetric("coveredelements", CoveredElements);

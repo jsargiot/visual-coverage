@@ -30,7 +30,6 @@ namespace VisualCoverage.Core.Elements
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using VisualCoverage.Core.Metrics;
 
     public class FileElement

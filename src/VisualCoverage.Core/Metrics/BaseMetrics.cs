@@ -64,7 +64,7 @@ namespace VisualCoverage.Core.Metrics
             }
         }
         
-        public String ToXml ()
+        public virtual String ToXml ()
         {
             StringBuilder buffer = new StringBuilder();
             buffer.Append("<metrics ");

@@ -28,8 +28,6 @@
 //
 namespace VisualCoverage.Core.Metrics
 {
-    using System;
-
     public class PackageMetrics : FileMetrics
     {
         public PackageMetrics ( uint complexity, uint statements, uint covered_statements, uint conditionals, uint covered_conditionals, uint methods, uint covered_methods, uint classes, uint nloc, uint ncloc, uint files )

@@ -4,6 +4,7 @@
     VisualCoverage
 
     MIT License Copyright (c) 2012 Joaquin Sargiotto (joaquinsargiotto@gmail.com).
+    (c) 2016 Thomas Ascher
     </description>
 
     <property name="BUILD.number" value="3" />
@@ -18,9 +19,6 @@
     <property name="BUILD.version" value="${VERSION.major}.${VERSION.minor}.${VERSION.patch}.${VERSION.build}" />
     <property name="BUILD.dir" value="${project::get-base-directory()}/build/${project::get-name()}" />
     <property name="BUILD.debug" value="true" />
-
-    <!-- Directory where all the 3rd party libs are -->
-    <property name="LIB.dir" value="${project::get-base-directory()}/lib" />
     
     <!-- Documentation folder -->
     <property name="DOC.dir" value="${project::get-base-directory()}/doc" />
@@ -66,10 +64,10 @@
         <mkdir dir="${BUILD.dir}/bin" />
         <!-- copy libraries to BUILD.dir -->
         <copy todir="${BUILD.dir}/bin">
-            <fileset basedir="${LIB.dir}">
-                <include name="**/*" />
+            <fileset>
+                <include name="${environment::get-variable('VS140COMNTOOLS')}..\IDE\PrivateAssemblies\Microsoft.VisualStudio.Coverage*.dll"/>
             </fileset>
-        </copy>
+        </copy>        
         <!-- build components -->
         <nant buildfile="src/VisualCoverage.Core/VisualCoverage.Core.build" target="build" />
         <nant buildfile="src/VisualCoverage.Console/VisualCoverage.Console.build" target="build" />
