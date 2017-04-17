@@ -44,20 +44,20 @@ namespace VisualCoverage.Core
             
             buffer.Append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
             buffer.Append(String.Format("\n<coverage generated=\"{0}\" clover=\"3.0.2\" xmlns=\"http://schemas.atlassian.com/clover3/report\">", project.Timestamp));
-            buffer.Append(String.Format("\n<project name=\"{0}\" timestamp=\"{1}\">", project.Name, project.Timestamp));
+            buffer.Append(String.Format("\n<project name=\"{0}\" timestamp=\"{1}\">", System.Security.SecurityElement.Escape(project.Name), project.Timestamp));
             buffer.Append(String.Format("\n  {0}", project.Metrics.ToXml()));
             
             foreach (PackageElement pe in project.GetPackages())
             {
-                buffer.Append(String.Format("\n  <package name=\"{0}\">", pe.Name));
+                buffer.Append(String.Format("\n  <package name=\"{0}\">", System.Security.SecurityElement.Escape(pe.Name)));
                 buffer.Append(String.Format("\n    {0}", pe.Metrics.ToXml()));
                 foreach (FileElement fe in pe.GetFiles())
                 {
-                    buffer.Append(String.Format("\n    <file name=\"{0}\" path=\"{1}\">", fe.Name, fe.Path));
+                    buffer.Append(String.Format("\n    <file name=\"{0}\" path=\"{1}\">", System.Security.SecurityElement.Escape(fe.Name), System.Security.SecurityElement.Escape(fe.Path)));
                     buffer.Append(String.Format("\n      {0}", fe.Metrics.ToXml()));
                     foreach (ClassElement ce in fe.GetClasses())
                     {
-                        buffer.Append(String.Format("\n      <class name=\"{0}\">", ce.Name));
+                        buffer.Append(String.Format("\n      <class name=\"{0}\">", System.Security.SecurityElement.Escape(ce.Name)));
                         buffer.Append(String.Format("\n        {0}", ce.Metrics.ToXml()));
                         buffer.Append("\n      </class>");
                     }
@@ -67,7 +67,7 @@ namespace VisualCoverage.Core
                         int visits = le.Coverage < 2 ? 1 : 0;
                         buffer.Append(String.Format("\n      <line num=\"{0}\" count=\"{1}\" type=\"{2}\"", le.Number, visits, le.Type));
                         if (le.Signature != null && le.Signature.Length > 0) {
-                            buffer.Append(String.Format(" signature=\"{0}\"", le.Signature));
+                            buffer.Append(String.Format(" signature=\"{0}\"", System.Security.SecurityElement.Escape(le.Signature)));
                         }
                         buffer.Append(" />");
                     }
