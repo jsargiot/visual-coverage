@@ -29,14 +29,15 @@
 namespace VisualCoverage.Core.Elements
 {
     using System;
+    using System.Collections.Generic;
     using VisualCoverage.Core.Metrics;
 
     public class ClassElement
     {
         private string _name = "";
-        private ClassMetrics _metrics;
-    
-        public ClassElement ( string name ) {
+        private List<MethodElement> _elements = new List<MethodElement>();
+
+        public ClassElement(string name) {
             _name = name;
         }
         
@@ -45,12 +46,30 @@ namespace VisualCoverage.Core.Elements
             get { return _name; }
             set { _name = value; }
         }
-        
+
         public ClassMetrics Metrics
         {
-            get { return _metrics; }
-            set { _metrics = value; }
+            get
+            {
+                // File metrics are calculated based on the classes
+                // inside this file.
+                ClassMetrics pm = new ClassMetrics(0, 0, 0, 0, (uint)_elements.Count);
+                foreach (MethodElement me in GetMethods())
+                {
+                    pm.Add(me.Metrics);
+                }
+                return pm;
+            }
+        }
+
+        public void AddMethod(MethodElement e)
+        {
+            _elements.Add(e);
+        }
+
+        public List<MethodElement> GetMethods()
+        {
+            return _elements;
         }
     }
 }
-

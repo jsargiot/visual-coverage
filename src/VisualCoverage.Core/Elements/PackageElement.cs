@@ -35,9 +35,9 @@ namespace VisualCoverage.Core.Elements
     public class PackageElement
     {
         private string _name = "";
-        private List<FileElement> _elements = new List<FileElement>();
+        private List<ClassElement> _elements = new List<ClassElement>();
     
-        public PackageElement ( string name ) {
+        public PackageElement(string name) {
             _name = name;
         }
         
@@ -52,26 +52,23 @@ namespace VisualCoverage.Core.Elements
             get {
                 // File metrics are calculated based on the classes
                 // inside this file.
-                PackageMetrics pm = new PackageMetrics(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (uint)_elements.Count);
-                foreach ( FileElement fe in GetFiles())
+                PackageMetrics pm = new PackageMetrics(0, 0, 0, 0, 0, (uint)_elements.Count);
+                foreach (ClassElement ce in GetClasses())
                 {
-                    pm.Add(fe.Metrics);
+                    pm.Add(ce.Metrics);
                 }
-                // Complexity is fixed, we shouldn't add this metric.
-                pm.SetMetric("complexity", 1);
                 return pm;
             }
         }
         
-        public void AddFile ( FileElement e )
+        public void AddClass(ClassElement e)
         {
             _elements.Add(e);
         }
         
-        public List<FileElement> GetFiles ()
+        public List<ClassElement> GetClasses()
         {
             return _elements;
         }
     }
 }
-

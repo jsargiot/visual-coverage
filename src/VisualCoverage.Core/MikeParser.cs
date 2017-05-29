@@ -108,99 +108,61 @@ namespace VisualCoverage.Core.Util
         }
 
         public ProjectElement Parse(String[] inputfiles) {
-            ProjectElement PROJECT = new ProjectElement("new_project", 123323230);
+            ProjectElement project = new ProjectElement();
+
             // Open file
             using (CoverageInfo info = JoinCoverageFiles(inputfiles))
             {
                 CoverageDS dataSet = info.BuildDataSet();
                 
                 Dictionary<String, PackageElement> packages = new Dictionary<String, PackageElement>();
-                Dictionary<uint, FileElement> files = new Dictionary<uint, FileElement>();
+                Dictionary<uint, string> files = new Dictionary<uint, string>();
                 
                 // Namespaces
                 DataTable namespacesTable = dataSet.Tables["NameSpaceTable"];
                 DataTable classesTable = dataSet.Tables["Class"];
                 DataTable filesTable = dataSet.Tables["SourceFileNames"];
                 
-                CreateIndexPackages(PROJECT, namespacesTable, packages);
+                CreateIndexPackages(project, namespacesTable, packages);
                 CreateIndexFiles(filesTable, files);
                 
                 foreach(DataRow iclass in classesTable.Rows)
                 {
-                    DataRow[] childRows = iclass.GetChildRows("Class_Method");
+                    string className = System.Security.SecurityElement.Escape((string)iclass["ClassName"]);
+                    ClassElement ce = new ClassElement(className);
 
-                    // Since it's one class per file (at least) declare
-                    // file here and add it to the class.
-                    uint fileid = 0;
-                    // uint classlocs = 0;
-                    uint covered_methods = 0;
-                    FileElement fe = null;
+                    DataRow[] methodRows = iclass.GetChildRows("Class_Method");
                     
-                    foreach(DataRow imethod in childRows)
+                    foreach(DataRow imethod in methodRows)
                     {
-                        // Method starting line
-                        uint linenum = 0;
                         // Get First Line in class
-                        DataRow[] childRows2 = imethod.GetChildRows("Method_Lines");
-                        //if(childRows2.Length > 0)
-                        foreach(DataRow iline in childRows2)
-                        {
-                            LineElement le = null;
-                            uint coverage = iline.Field<uint>("Coverage");
-                            if (linenum == 0)
-                            {
-                                fileid = iline.Field<uint>("SourceFileID");
-                                string methodname = System.Security.SecurityElement.Escape((string)imethod["MethodName"]);
-                                linenum = iline.Field<uint>("LnStart");
-                                le = new LineElement(linenum, "method", methodname, coverage);
-                            } else {
-                                linenum = iline.Field<uint>("LnStart");
-                                le = new LineElement(linenum, "stmt", "", coverage);
-                            }
-                            
-                            // If the file doesn't exists in our report, we'll
-                            // just ignore this information
-                            if (files.ContainsKey(fileid))
-                            {
-                                fe = files[fileid];
-                                fe.AddLine(le);
-                            }
-                        }
-                        
-                        // Count how many methods covered we have
-                        if ((uint)imethod["LinesCovered"] > 0) covered_methods++;
-                    }
-                    
-                    uint totallines = (uint)iclass["LinesCovered"] + (uint)iclass["LinesNotCovered"] + (uint)iclass["LinesPartiallyCovered"];
-                    uint complexity = 1;
-                    uint methods = (uint)childRows.Length;
-                    uint statements = totallines - methods;
-                    uint covered_statements = (uint)iclass["LinesCovered"] - covered_methods;
-                    uint conditionals = 0;
-                    uint covered_conditionals = 0;
-                    
-                    ClassElement ce = new ClassElement (System.Security.SecurityElement.Escape((string)iclass["ClassName"]));
-                    ce.Metrics = new ClassMetrics(complexity, statements, covered_statements, conditionals, covered_conditionals, methods, covered_methods);
-                    
-                    if (fe != null)
-                    {
-                        if (!fe.GetClasses().Contains(ce))
-                        {
-                            fe.AddClass(ce);
-                        }
+                        DataRow[] lineRows = imethod.GetChildRows("Method_Lines");
+                        bool includeFile = lineRows.Length < 1 ? false : files.ContainsKey(lineRows[0].Field<uint>("SourceFileID"));
 
-                        if (packages.ContainsKey((string)iclass["NamespaceKeyName"]))
+                        if (includeFile)
                         {
-                            PackageElement pe = packages[(string)iclass["NamespaceKeyName"]];
-                            if (!pe.GetFiles().Contains(fe))
-                            {
-                                pe.AddFile(fe);
-                            }
+                            string methodName = (string)imethod["MethodName"]; // System.Security.SecurityElement.Escape((string)imethod["MethodName"]);
+                            MethodElement me = new MethodElement(methodName);
+
+                            uint coveredBlocks = (uint)imethod["BlocksCovered"];
+                            uint totalBlocks = coveredBlocks + (uint)imethod["BlocksNotCovered"];
+                            uint coveredLines = (uint)imethod["LinesCovered"];
+                            uint totalLines = coveredLines + (uint)imethod["LinesNotCovered"] + (uint)imethod["LinesPartiallyCovered"];
+                            me.Metrics = new MethodMetrics(totalBlocks, coveredBlocks, totalLines, coveredLines);
+
+                            ce.AddMethod(me);
                         }
+                    }
+
+                    if (packages.ContainsKey((string)iclass["NamespaceKeyName"]))
+                    {
+                        PackageElement pe = packages[(string)iclass["NamespaceKeyName"]];
+                        pe.AddClass(ce);
                     }
                 }
             }
-            return PROJECT;
+
+            return project;
         }
         
         private void CreateIndexPackages ( ProjectElement project, DataTable origin, Dictionary<String, PackageElement> dest )
@@ -241,7 +203,7 @@ namespace VisualCoverage.Core.Util
             }
         }
         
-        private void CreateIndexFiles ( DataTable origin, Dictionary<uint, FileElement> dest )
+        private void CreateIndexFiles ( DataTable origin, Dictionary<uint, string> dest )
         {
             foreach(DataRow row in origin.Rows)
             {
@@ -273,8 +235,7 @@ namespace VisualCoverage.Core.Util
                 if (include)
                 {
                     FileInfo info = new FileInfo(fname);
-                    FileElement fe = new FileElement (info.Name, info.FullName);
-                    dest.Add((uint)row["SourceFileID"], fe);
+                    dest.Add((uint)row["SourceFileID"], info.FullName);
                 }
             }
         }

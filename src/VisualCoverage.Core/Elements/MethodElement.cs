@@ -1,5 +1,5 @@
 //
-// visual-coverage: LineElement.cs
+// visual-coverage: FileElement.cs
 //
 // Author:
 //   Joaquin Sargiotto (joaquinsargiotto@gmail.com)
@@ -29,44 +29,33 @@
 namespace VisualCoverage.Core.Elements
 {
     using System;
+    using System.Collections.Generic;
+    using VisualCoverage.Core.Metrics;
 
-    public class LineElement
+    public class MethodElement
     {
-        private uint _num = 0;
-        private string _type = "";
-        private string _signature = "";
-        private uint _coverage = 0;
-    
-        public LineElement ( uint num, string type, string signature, uint coverage ) {
-            _num = num;
-            _type = type;
-            _signature = signature;
-            _coverage = coverage;
+        private string _name = "";
+        private MethodMetrics _metrics;
+
+        public MethodElement(string name) {
+            _name = name;
         }
         
-        public uint Number
+        public String Name
         {
-            get { return _num; }
-            set { _num = value; }
+            get { return _name; }
+            set { _name = value; }
         }
         
-        public String Type
+        public MethodMetrics Metrics
         {
-            get { return _type; }
-            set { _type = value; }
-        }
-        
-        public String Signature
-        {
-            get { return _signature; }
-            set { _signature = value; }
-        }
-        
-        public uint Coverage
-        {
-            get { return _coverage; }
-            set { _coverage = value; }
+            get {
+                return _metrics;
+            }
+            set
+            {
+                _metrics = value;
+            }
         }
     }
 }
-

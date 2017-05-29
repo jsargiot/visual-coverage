@@ -47,20 +47,18 @@ namespace VisualCoverage.Core.Metrics
                 _metrics[name] = value;
         }
         
-        public void Add ( BaseMetrics bm )
+        public void Add(BaseMetrics bm)
         {
-            uint a = 0, b = 0;
-            // Put all keys in a HashSet so we'll have all the keys
-            // without repetition.
-            HashSet<string> keys = new HashSet<string>(_metrics.Keys);
-            keys.UnionWith(bm._metrics.Keys);
-            // Iterate over all keys (from any of the metrics containers)
-            // and add them up (zero when doesn't exists in the container).
-            foreach( string k in keys )
+            foreach (var key in bm._metrics.Keys)
             {
-                a = (_metrics.ContainsKey(k))? _metrics[k] : 0;
-                b = (bm._metrics.ContainsKey(k))? bm._metrics[k] : 0;
-                this.SetMetric (k, a+b);
+                var value = bm._metrics[key];
+
+                if (_metrics.ContainsKey(key))
+                {
+                    value += _metrics[key];
+                }
+
+                SetMetric(key, value);
             }
         }
         

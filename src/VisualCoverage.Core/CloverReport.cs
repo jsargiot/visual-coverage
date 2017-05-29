@@ -41,37 +41,31 @@ namespace VisualCoverage.Core
         public virtual String Execute ( ProjectElement project ) {
             
             StringBuilder buffer = new StringBuilder();
+
+            Int32 timestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             
             buffer.Append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-            buffer.Append(String.Format("\n<coverage generated=\"{0}\" clover=\"3.0.2\" xmlns=\"http://schemas.atlassian.com/clover3/report\">", project.Timestamp));
-            buffer.Append(String.Format("\n<project name=\"{0}\" timestamp=\"{1}\">", System.Security.SecurityElement.Escape(project.Name), project.Timestamp));
+            buffer.Append(String.Format("\n<coverage generated=\"{0}\" clover=\"3.0.2\" xmlns=\"http://schemas.atlassian.com/clover3/report\">", timestamp));
+            buffer.Append(String.Format("\n<project name=\"\" timestamp=\"{0}\">", timestamp));
             buffer.Append(String.Format("\n  {0}", project.Metrics.ToXml()));
             
             foreach (PackageElement pe in project.GetPackages())
             {
                 buffer.Append(String.Format("\n  <package name=\"{0}\">", System.Security.SecurityElement.Escape(pe.Name)));
                 buffer.Append(String.Format("\n    {0}", pe.Metrics.ToXml()));
-                foreach (FileElement fe in pe.GetFiles())
+
+                foreach (ClassElement ce in pe.GetClasses())
                 {
-                    buffer.Append(String.Format("\n    <file name=\"{0}\" path=\"{1}\">", System.Security.SecurityElement.Escape(fe.Name), System.Security.SecurityElement.Escape(fe.Path)));
-                    buffer.Append(String.Format("\n      {0}", fe.Metrics.ToXml()));
-                    foreach (ClassElement ce in fe.GetClasses())
+                    buffer.Append(String.Format("\n    <class name=\"{0}\">", System.Security.SecurityElement.Escape(ce.Name)));
+                    buffer.Append(String.Format("\n      {0}", ce.Metrics.ToXml()));
+
+                    foreach (MethodElement me in ce.GetMethods())
                     {
-                        buffer.Append(String.Format("\n      <class name=\"{0}\">", System.Security.SecurityElement.Escape(ce.Name)));
-                        buffer.Append(String.Format("\n        {0}", ce.Metrics.ToXml()));
-                        buffer.Append("\n      </class>");
+                        buffer.Append(String.Format("\n      <method name=\"{0}\">", System.Security.SecurityElement.Escape(me.Name)));
+                        buffer.Append(String.Format("\n        {0}", me.Metrics.ToXml()));
+                        buffer.Append("\n      </method>");
                     }
-                    
-                    foreach (LineElement le in fe.GetLines())
-                    {
-                        int visits = le.Coverage < 2 ? 1 : 0;
-                        buffer.Append(String.Format("\n      <line num=\"{0}\" count=\"{1}\" type=\"{2}\"", le.Number, visits, le.Type));
-                        if (le.Signature != null && le.Signature.Length > 0) {
-                            buffer.Append(String.Format(" signature=\"{0}\"", System.Security.SecurityElement.Escape(le.Signature)));
-                        }
-                        buffer.Append(" />");
-                    }
-                    buffer.Append("\n    </file>");
+                    buffer.Append("\n    </class>");
                 }
                 buffer.Append("\n  </package>");
             }

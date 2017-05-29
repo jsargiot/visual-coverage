@@ -30,8 +30,8 @@ namespace VisualCoverage.Core.Metrics
 {
     public class ProjectMetrics : PackageMetrics
     {
-        public ProjectMetrics ( uint complexity, uint statements, uint covered_statements, uint conditionals, uint covered_conditionals, uint methods, uint covered_methods, uint classes, uint nloc, uint ncloc, uint files, uint packages )
-         :base(complexity, statements, covered_statements, conditionals, covered_conditionals, methods, covered_methods, classes, nloc, ncloc, files)
+        public ProjectMetrics(uint blocks, uint covered_blocks, uint lines, uint covered_lines, uint methods, uint classes, uint packages)
+            : base(blocks, covered_blocks, lines, covered_lines, methods, classes)
         {
             SetMetric("packages", packages);
         }
