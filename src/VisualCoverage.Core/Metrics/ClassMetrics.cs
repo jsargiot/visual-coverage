@@ -28,40 +28,12 @@
 //
 namespace VisualCoverage.Core.Metrics
 {
-    using System;
-
-    public class ClassMetrics : BaseMetrics
+    public class ClassMetrics : MethodMetrics
     {
-        public ClassMetrics()
-        {}
-    
-        public ClassMetrics ( uint complexity, uint statements, uint covered_statements, uint conditionals, uint covered_conditionals, uint methods, uint covered_methods ) {
-            SetMetric("complexity", complexity);
-            SetMetric("conditionals", conditionals);
-            SetMetric("coveredconditionals", covered_conditionals);
-            SetMetric("statements", statements);
-            SetMetric("coveredstatements", covered_statements);
+        public ClassMetrics(uint blocks, uint covered_blocks, uint lines, uint covered_lines, uint methods)
+            : base(blocks, covered_blocks, lines, covered_lines)
+        {
             SetMetric("methods", methods);
-            SetMetric("coveredmethods", covered_methods);
         }
-        
-        public uint Elements
-        {
-            get { return _metrics["conditionals"] + _metrics["statements"] + _metrics["methods"]; }
-        }
-        
-        public uint CoveredElements
-        {
-            get { return _metrics["coveredconditionals"] + _metrics["coveredstatements"] + _metrics["coveredmethods"]; }
-        }
-        
-        public override String ToXml ()
-        {
-            SetMetric("elements", Elements);
-            SetMetric("coveredelements", CoveredElements);
-
-            return base.ToXml();
-        }
-        
     }
 }

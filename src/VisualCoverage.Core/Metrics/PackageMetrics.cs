@@ -28,12 +28,12 @@
 //
 namespace VisualCoverage.Core.Metrics
 {
-    public class PackageMetrics : FileMetrics
+    public class PackageMetrics : ClassMetrics
     {
-        public PackageMetrics ( uint complexity, uint statements, uint covered_statements, uint conditionals, uint covered_conditionals, uint methods, uint covered_methods, uint classes, uint nloc, uint ncloc, uint files )
-         : base(complexity, statements, covered_statements, conditionals, covered_conditionals, methods, covered_methods, classes, nloc, ncloc)
+        public PackageMetrics(uint blocks, uint covered_blocks, uint lines, uint covered_lines, uint methods, uint classes)
+            : base(blocks, covered_blocks, lines, covered_lines, methods)
         {
-            SetMetric("files", files);
+            SetMetric("classes", classes);
         }
     }
 }

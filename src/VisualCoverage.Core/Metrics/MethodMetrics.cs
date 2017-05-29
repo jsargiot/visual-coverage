@@ -1,5 +1,5 @@
 //
-// visual-coverage: FileMetrics.cs
+// visual-coverage: ClassMetrics.cs
 //
 // Author:
 //   Joaquin Sargiotto (joaquinsargiotto@gmail.com)
@@ -28,14 +28,13 @@
 //
 namespace VisualCoverage.Core.Metrics
 {
-    public class FileMetrics : ClassMetrics
+    public class MethodMetrics : BaseMetrics
     {
-        public FileMetrics ( uint complexity, uint statements, uint covered_statements, uint conditionals, uint covered_conditionals, uint methods, uint covered_methods, uint classes, uint nloc, uint ncloc )
-         : base(complexity, statements, covered_statements, conditionals, covered_conditionals, methods, covered_methods)
-        {
-            SetMetric("classes", classes);
-            SetMetric("nloc", nloc);
-            SetMetric("ncloc", ncloc);
+        public MethodMetrics(uint blocks, uint covered_blocks, uint lines, uint covered_lines) {
+            SetMetric("blocks", blocks);
+            SetMetric("coveredblocks", covered_blocks);
+            SetMetric("lines", lines);
+            SetMetric("coveredlines", covered_lines);
         }
     }
 }

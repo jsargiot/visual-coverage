@@ -28,31 +28,14 @@
 //
 namespace VisualCoverage.Core.Elements
 {
-    using System;
     using System.Collections.Generic;
     using VisualCoverage.Core.Metrics;
 
     public class ProjectElement
     {
-        private string _name = "";
-        private uint _timestamp = 0;
         private List<PackageElement> _elements = new List<PackageElement>();
     
-        public ProjectElement ( string name, uint timestamp ) {
-            _name = name;
-            _timestamp = timestamp;
-        }
-        
-        public String Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
-        
-        public uint Timestamp
-        {
-            get { return _timestamp; }
-            set { _timestamp = value; }
+        public ProjectElement() {
         }
         
         public ProjectMetrics Metrics
@@ -60,23 +43,21 @@ namespace VisualCoverage.Core.Elements
             get {
                 // File metrics are calculated based on the classes
                 // inside this file.
-                ProjectMetrics pm = new ProjectMetrics(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (uint)_elements.Count);
+                ProjectMetrics pm = new ProjectMetrics(0, 0, 0, 0, 0, 0, (uint)_elements.Count);
                 foreach ( PackageElement pe in GetPackages())
                 {
                     pm.Add(pe.Metrics);
                 }
-                // Complexity is fixed, we shouldn't add this metric.
-                pm.SetMetric("complexity", 1);
                 return pm;
             }
         }
         
-        public void AddPackage ( PackageElement e )
+        public void AddPackage(PackageElement e)
         {
             _elements.Add(e);
         }
         
-        public List<PackageElement> GetPackages ()
+        public List<PackageElement> GetPackages()
         {
             return _elements;
         }
