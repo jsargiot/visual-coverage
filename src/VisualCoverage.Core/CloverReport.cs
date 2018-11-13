@@ -30,6 +30,7 @@ namespace VisualCoverage.Core
 {
     using System;
     using System.Text;
+    using System.IO;
     using VisualCoverage.Core.Elements;
 
     public class CloverReport
@@ -38,6 +39,49 @@ namespace VisualCoverage.Core
             
         }
         
+        public void DirectWrite(StreamWriter outfile, ProjectElement project, bool shortReport)
+        {
+            outfile.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+            outfile.Write(String.Format("\n<coverage generated=\"{0}\" clover=\"3.0.2\" xmlns=\"http://schemas.atlassian.com/clover3/report\">", project.Timestamp));
+            outfile.Write(String.Format("\n<project name=\"{0}\" timestamp=\"{1}\">", project.Name, project.Timestamp));
+            outfile.Write(String.Format("\n  {0}", project.Metrics.ToXml()));
+
+            foreach (PackageElement pe in project.GetPackages())
+            {
+                outfile.Write(String.Format("\n  <package name=\"{0}\">", pe.Name));
+                outfile.Write(String.Format("\n    {0}", pe.Metrics.ToXml()));
+                foreach (FileElement fe in pe.GetFiles())
+                {
+                    outfile.Write(String.Format("\n    <file name=\"{0}\" path=\"{1}\">", fe.Name, fe.Path));
+                    outfile.Write(String.Format("\n      {0}", fe.Metrics.ToXml()));
+                    if (!shortReport)
+                    {
+                        foreach (ClassElement ce in fe.GetClasses())
+                        {
+                            outfile.Write(String.Format("\n      <class name=\"{0}\">", ce.Name));
+                            outfile.Write(String.Format("\n        {0}", ce.Metrics.ToXml()));
+                            outfile.Write("\n      </class>");
+                        }
+
+                        foreach (LineElement le in fe.GetLines())
+                        {
+                            int visits = le.Coverage < 2 ? 1 : 0;
+                            outfile.Write(String.Format("\n      <line num=\"{0}\" count=\"{1}\" type=\"{2}\"", le.Number, visits, le.Type));
+                            if (le.Signature != null && le.Signature.Length > 0)
+                            {
+                                outfile.Write(String.Format(" signature=\"{0}\"", le.Signature));
+                            }
+                            outfile.Write(" />");
+                        }
+                    }
+                    outfile.Write("\n    </file>");
+                }
+                outfile.Write("\n  </package>");
+            }
+            outfile.Write("</project>");
+            outfile.Write("</coverage>");
+        }
+
         public virtual String Execute ( ProjectElement project ) {
             
             StringBuilder buffer = new StringBuilder();
