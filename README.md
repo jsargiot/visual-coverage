@@ -24,7 +24,7 @@ Usage
 
 VisualCoverage.exe -i file.coverage [--html report.html] [--clover report.xml] 
     [--include-namespace pattern] [--exclude-namespace pattern]
-    [--include-file pattern] [--exclude-file pattern]
+    [--include-file pattern] [--exclude-file pattern] [--shortReport]
 
 Options:
 
@@ -36,6 +36,10 @@ Options:
 
   -i, --input           Required. Visual studio coverage (*.coverage) input
                         file. Can be specified multiple times.
+                        
+  -s, --shortReport     Create a short xml report and skip all detail information
+                        This means skipping class and line information, in order
+                        to create a report based on files.
 
   --include-namespace   Includes a namespace in the report. If no namespace is
                         added, all namespaces are included. This value can be
@@ -72,6 +76,9 @@ Examples
 
     # Generates a clover report from the coverage file
     VisualCoverage.exe --input somefile.coverage --clover clover.xml
+
+    # Generates a clover report from the coverage file without class and line information 
+    VisualCoverage.exe --input somefile.coverage --clover clover.xml --shortReport
 
     # Generates both reports from a single input file
     VisualCoverage.exe --input otherfile.coverage --html report.html --clover clover.xml
