@@ -28,6 +28,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
+
+// ------------------------------------------------------------------------------------------------
+// (C) Siemens AG, 2018
+// a small change was done to deliver the name of the binary that was read.
+// a small change was done to catch an exception in some places where illegal path names were given.
+// Direct xml writing instead of string creator due to large xml files
+// added a command line switch /short to skip detail information on coverage.
+// ------------------------------------------------------------------------------------------------
 namespace VisualCoverage.Console
 {
     using System;
@@ -112,6 +120,7 @@ namespace VisualCoverage.Console
                 }
             }
 
+            // (C) Siemens AG, [2018] begin---> 
             [Option("s", "shortReport", Required = false, DefaultValue = false, HelpText = "create only a short report (excluding line details)")]
             public bool shortReport { get; set; }
             // <---- end
@@ -163,7 +172,10 @@ namespace VisualCoverage.Console
                 CloverReport cloverreport = new CloverReport();
                 using (StreamWriter outfile = new StreamWriter(options.CloverOutput))
                 {
+                    // (C) Siemens AG, [2018] begin---> 
                     cloverreport.DirectWrite(outfile, pe, options.shortReport);
+                    // outfile.Write(cloverreport.Execute(pe));
+                    // <---- end
                 }
             }
             // Generate html report

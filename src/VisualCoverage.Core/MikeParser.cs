@@ -26,6 +26,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
+
+// ------------------------------------------------------------------------------------------------
+// (C) Siemens AG, 2017
+// a small change was done to deliver the name of the binary that was read.
+// a small change was done to catch an exception in some places where illegal path names were given.
+// ------------------------------------------------------------------------------------------------
 namespace VisualCoverage.Core.Util
 {
     using System;
@@ -212,9 +218,11 @@ namespace VisualCoverage.Core.Util
                 if (__includeNamespaces.Count < 1)
                     __includeNamespaces.Add(".*");
                 // Check if the namespace is included
+
+                // (C) Siemens AG, [2017] begin---> 
                 // String nsname = (string)row["NamespaceName"];
                 String nsname = (string)row.ItemArray[5];
-                
+                // <---- end
                 foreach (string entry in __includeNamespaces)
                 {
                     if (TestRegex(nsname, entry)) 
@@ -274,6 +282,10 @@ namespace VisualCoverage.Core.Util
                 // add it to the dictionary
                 if (include)
                 {
+                    // (C) Siemens AG, [2017] begin---> 
+                    // FileInfo info = new FileInfo(fname);
+                    // FileElement fe = new FileElement (info.Name, info.FullName);
+                    // dest.Add((uint)row["SourceFileID"], fe);
                     try
                     {
                         FileInfo info = new FileInfo(fname);
@@ -284,6 +296,7 @@ namespace VisualCoverage.Core.Util
                     {
                         Console.WriteLine("Error reading file {0}. Message = {1}", fname, e.Message);
                     }
+                    // <---- end
                 }
             }
         }
