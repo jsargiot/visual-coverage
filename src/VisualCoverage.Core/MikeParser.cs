@@ -134,8 +134,8 @@ namespace VisualCoverage.Core.Util
                     uint fileid = 0;
                     // uint classlocs = 0;
                     uint covered_methods = 0;
-                    FileElement fe = null;
-                    
+                    HashSet<FileElement> fes = new HashSet<FileElement>();
+
                     foreach(DataRow imethod in childRows)
                     {
                         // Method starting line
@@ -162,8 +162,10 @@ namespace VisualCoverage.Core.Util
                             // just ignore this information
                             if (files.ContainsKey(fileid))
                             {
-                                fe = files[fileid];
+                                FileElement fe = files[fileid];
                                 fe.AddLine(le);
+
+                                fes.Add(fe);
                             }
                         }
                         
@@ -181,8 +183,8 @@ namespace VisualCoverage.Core.Util
                     
                     ClassElement ce = new ClassElement (System.Security.SecurityElement.Escape((string)iclass["ClassName"]));
                     ce.Metrics = new ClassMetrics(complexity, statements, covered_statements, conditionals, covered_conditionals, methods, covered_methods);
-                    
-                    if (fe != null)
+
+                    foreach (var fe in fes)
                     {
                         if (!fe.GetClasses().Contains(ce))
                         {
