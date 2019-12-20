@@ -28,6 +28,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
+
 namespace VisualCoverage.Console
 {
     using System;
@@ -112,6 +113,9 @@ namespace VisualCoverage.Console
                 }
             }
 
+            [Option("s", "shortReport", Required = false, DefaultValue = false, HelpText = "create only a short report (excluding line details)")]
+            public bool shortReport { get; set; }
+            
             [HelpOption]
             public string GetUsage()
             {
@@ -159,7 +163,7 @@ namespace VisualCoverage.Console
                 CloverReport cloverreport = new CloverReport();
                 using (StreamWriter outfile = new StreamWriter(options.CloverOutput))
                 {
-                    outfile.Write(cloverreport.Execute(pe));
+                    cloverreport.DirectWrite(outfile, pe, options.shortReport);
                 }
             }
             // Generate html report

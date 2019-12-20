@@ -26,6 +26,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
+
 namespace VisualCoverage.Core.Util
 {
     using System;
@@ -212,7 +213,8 @@ namespace VisualCoverage.Core.Util
                 if (__includeNamespaces.Count < 1)
                     __includeNamespaces.Add(".*");
                 // Check if the namespace is included
-                String nsname = (string)row["NamespaceName"];
+
+                String nsname = (string)row.ItemArray[5];
                 foreach (string entry in __includeNamespaces)
                 {
                     if (TestRegex(nsname, entry)) 
@@ -272,9 +274,17 @@ namespace VisualCoverage.Core.Util
                 // add it to the dictionary
                 if (include)
                 {
-                    FileInfo info = new FileInfo(fname);
-                    FileElement fe = new FileElement (info.Name, info.FullName);
-                    dest.Add((uint)row["SourceFileID"], fe);
+                    try
+                    {
+                        FileInfo info = new FileInfo(fname);
+                        FileElement fe = new FileElement(info.Name, info.FullName);
+                        dest.Add((uint)row["SourceFileID"], fe);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Error reading file {0}. Message = {1}", fname, e.Message);
+                    }
+                    // <---- end
                 }
             }
         }
