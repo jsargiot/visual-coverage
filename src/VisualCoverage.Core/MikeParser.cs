@@ -27,11 +27,6 @@
 // THE SOFTWARE.
 //
 
-// ------------------------------------------------------------------------------------------------
-// (C) Siemens AG, 2017
-// a small change was done to deliver the name of the binary that was read.
-// a small change was done to catch an exception in some places where illegal path names were given.
-// ------------------------------------------------------------------------------------------------
 namespace VisualCoverage.Core.Util
 {
     using System;
@@ -219,10 +214,7 @@ namespace VisualCoverage.Core.Util
                     __includeNamespaces.Add(".*");
                 // Check if the namespace is included
 
-                // (C) Siemens AG, [2017] begin---> 
-                // String nsname = (string)row["NamespaceName"];
                 String nsname = (string)row.ItemArray[5];
-                // <---- end
                 foreach (string entry in __includeNamespaces)
                 {
                     if (TestRegex(nsname, entry)) 
@@ -282,10 +274,6 @@ namespace VisualCoverage.Core.Util
                 // add it to the dictionary
                 if (include)
                 {
-                    // (C) Siemens AG, [2017] begin---> 
-                    // FileInfo info = new FileInfo(fname);
-                    // FileElement fe = new FileElement (info.Name, info.FullName);
-                    // dest.Add((uint)row["SourceFileID"], fe);
                     try
                     {
                         FileInfo info = new FileInfo(fname);

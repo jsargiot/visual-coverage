@@ -27,18 +27,11 @@
 // THE SOFTWARE.
 //
 
-// ------------------------------------------------------------------------------------------------
-// (C) Siemens AG, 2017
-// a small change was done to deliver the name of the binary that was read.
-// a small change was done to catch an exception in some places where illegal path names were given.
-// ------------------------------------------------------------------------------------------------
 namespace VisualCoverage.Core
 {
     using System;
     using System.Text;
-    // (C) Siemens AG, [2018] begin---> 
     using System.IO;
-    // <---- end
     using VisualCoverage.Core.Elements;
 
     public class CloverReport
@@ -47,7 +40,6 @@ namespace VisualCoverage.Core
             
         }
         
-        // (C) Siemens AG, [2018] begin---> 
         public void DirectWrite(StreamWriter outfile, ProjectElement project, bool shortReport)
         {
             outfile.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
@@ -90,7 +82,6 @@ namespace VisualCoverage.Core
             outfile.Write("</project>");
             outfile.Write("</coverage>");
         }
-        // <---- end
 
         public virtual String Execute ( ProjectElement project ) {
             
